@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PruebaTecnica.Data;
 
 namespace PruebaTecnica
 {
@@ -15,7 +17,12 @@ namespace PruebaTecnica
     {
         public Startup(IConfiguration configuration)
         {
+
             Configuration = configuration;
+            using (var client = new EquiposContext())
+            {
+                client.Database.EnsureCreated();
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -23,6 +30,8 @@ namespace PruebaTecnica
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<EquiposContext>(options =>
+               options.UseSqlite(Configuration.GetConnectionString("ConexionSQLite")));
             services.AddControllersWithViews();
         }
 

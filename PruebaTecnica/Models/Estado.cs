@@ -13,9 +13,7 @@ namespace PruebaTecnica.Models
 
         public enum Estados
         {
-            Activo,
-            Cancelado,
-            Agente_Libre
+            Activo, Cancelado, Agente_Libre  
         }
     }
 }
