@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,15 @@ namespace PruebaTecnica.Controllers
 {
     public class EquipoesController : Controller
     {
+        private readonly IWebHostEnvironment _environment;
         private readonly EquiposContext _context;
 
-        public EquipoesController(EquiposContext context)
+
+        public EquipoesController(EquiposContext context, IWebHostEnvironment environment)
         {
+            _environment = environment;
             _context = context;
+            
         }
 
         // GET: Equipoes
@@ -48,7 +53,9 @@ namespace PruebaTecnica.Controllers
         // GET: Equipoes/Create
         public IActionResult Create()
         {
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id");
+            List<ISO3> lista = ISO3.RetornarListaPaises(_environment.ContentRootPath);
+            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "NombreEstado");
+            ViewData["Paises"] = lista.Select(pais=> new SelectListItem() { Text = pais.Nombre, Value = pais.Codigo });
             return View();
         }
 
