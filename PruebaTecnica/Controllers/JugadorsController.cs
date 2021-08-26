@@ -49,8 +49,8 @@ namespace PruebaTecnica.Controllers
         // GET: Jugadors/Create
         public IActionResult Create()
         {
-            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Id");
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id");
+            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Nombre");
+            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "NombreEstado");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace PruebaTecnica.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Id", jugador.EquipoId);
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id", jugador.EstadoId);
+            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Nombre", jugador.EquipoId);
+            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "NombreEstado", jugador.EstadoId);
             return View(jugador);
         }
 
@@ -85,8 +85,8 @@ namespace PruebaTecnica.Controllers
             {
                 return NotFound();
             }
-            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Id", jugador.EquipoId);
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id", jugador.EstadoId);
+            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Nombre", jugador.EquipoId);
+            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "NombreEstado", jugador.EstadoId);
             return View(jugador);
         }
 
@@ -122,8 +122,8 @@ namespace PruebaTecnica.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Id", jugador.EquipoId);
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id", jugador.EstadoId);
+            ViewData["EquipoId"] = new SelectList(_context.Equipos, "Id", "Nombre", jugador.EquipoId);
+            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "NombreEstado", jugador.EstadoId);
             return View(jugador);
         }
 

@@ -111,7 +111,7 @@ namespace PruebaTecnica.Controllers
             {
                 return NotFound();
             }
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id", equipo.EstadoId);
+            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "NombreEstado", equipo.EstadoId);
             return View(equipo);
         }
 
@@ -149,7 +149,7 @@ namespace PruebaTecnica.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id", equipo.EstadoId);
+            ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "NombreEstado", equipo.EstadoId);
             return View(equipo);
         }
 
@@ -188,7 +188,7 @@ namespace PruebaTecnica.Controllers
             return _context.Equipos.Any(e => e.Id == id);
         }
 
-        public async Task<IActionResult> ObtenerJugadores(int? id)
+        public async Task<IActionResult> ObtenerJugadores(int? id, string estado = "Todos")
         {
             if (id == null)
             {
@@ -201,10 +201,33 @@ namespace PruebaTecnica.Controllers
                 return NotFound();
             }
 
-            List<Jugador> jugadoresList = new List<Jugador>();
-            await _context.Jugadores.Include(e => e.Estado).Where(j => j.EquipoId == id).ForEachAsync(jugador => jugadoresList.Add(jugador));
+            ViewData["equipoData"] = equipo;
 
-            return View("JPorEstados", jugadoresList);
+            List<string> stateList = new List<string>();
+            await _context.Estados.ForEachAsync(e => { stateList.Add(e.NombreEstado); });
+            stateList.Add("Todos");
+            ViewData["opciones"] = stateList;
+
+            List<Jugador> estadoJugadores = new List<Jugador>();
+            var jugadoresContext = _context.Jugadores.Include(e => e.Estado);
+
+            switch (estado)
+            {
+                case "Todos":
+                    await jugadoresContext.Where(e => e.EquipoId == id).ForEachAsync(e => estadoJugadores.Add(e));
+                    break;
+                case "Activo":
+                    await jugadoresContext.Where(e => e.EquipoId == id && e.EstadoId == 1).ForEachAsync(e => estadoJugadores.Add(e));
+                    break;
+                case "Cancelado":
+                    await jugadoresContext.Where(e => e.EquipoId == id && e.EstadoId == 2).ForEachAsync(e => estadoJugadores.Add(e));
+                    break;
+                default:
+                    await jugadoresContext.Where(e => e.EquipoId == id && e.EstadoId == 3).ForEachAsync(e => estadoJugadores.Add(e));
+                    break;
+            }
+
+            return View("JPorEstados", estadoJugadores);
         }
     }
 }

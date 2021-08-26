@@ -4,8 +4,20 @@
     ViewData["Title"] = "JPorEstados";
 }
 
-<h1>Jugadores de @Model.First().Equipo.Nombre por estado</h1>
+<h1 class="mb-4">Jugadores de @ViewBag.equipoData.Nombre por estado</h1>
 
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Filtro de Estados
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        @{ foreach (string item in ViewBag.opciones)
+            {
+                <a asp-action="ObtenerJugadores" asp-route-estado="@item" asp-route-id=@ViewBag.equipoData.Id class="dropdown-item">@item</a>
+            };
+        }
+    </div>
+</div>
 <table class="table mt-5">
     <thead>
         <tr>
