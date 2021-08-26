@@ -19,10 +19,7 @@ namespace PruebaTecnica
         {
 
             Configuration = configuration;
-            using (var client = new EquiposContext())
-            {
-                client.Database.EnsureCreated();
-            }
+
         }
 
         public IConfiguration Configuration { get; }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-
 namespace PruebaTecnica.Models
 {
     public class Jugador
@@ -26,7 +25,5 @@ namespace PruebaTecnica.Models
         [Display(Name = "Estado")]
         public int EstadoId { get; set; }
         public Estado Estado { get; set; }
-
-
     }
 }
