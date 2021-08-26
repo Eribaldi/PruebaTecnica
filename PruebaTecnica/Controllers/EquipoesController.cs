@@ -25,10 +25,32 @@ namespace PruebaTecnica.Controllers
         }
 
         // GET: Equipoes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string estado = "Todos")
         {
+            List<string> stateList = new List<string>();
+             await _context.Estados.ForEachAsync(e =>{ stateList.Add(e.NombreEstado); });
+            stateList.Add("Todos");
+            ViewData["opciones"] = stateList;
+
+            List <Equipo> estadoJugadores = new List<Equipo>();
             var equiposContext = _context.Equipos.Include(e => e.Estado);
-            return View(await equiposContext.ToListAsync());
+
+            switch (estado)
+            {
+                case "Todos":
+                    await equiposContext.ForEachAsync(e => estadoJugadores.Add(e));
+                    break;
+                case "Activo":
+                    await equiposContext.Where(e => e.Estado.Id == 1).ForEachAsync(e => estadoJugadores.Add(e));
+                    break; 
+                case "Cancelado":
+                    await equiposContext.Where(e => e.Estado.Id == 2).ForEachAsync(e => estadoJugadores.Add(e));
+                    break; 
+                default:
+                    await equiposContext.Where(e => e.Estado.Id == 3).ForEachAsync(e => estadoJugadores.Add(e));
+                    break;
+            }
+            return View(estadoJugadores);
         }
 
         // GET: Equipoes/Details/5
@@ -92,6 +114,8 @@ namespace PruebaTecnica.Controllers
             ViewData["EstadoId"] = new SelectList(_context.Estados, "Id", "Id", equipo.EstadoId);
             return View(equipo);
         }
+
+
 
         // POST: Equipoes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -162,6 +186,25 @@ namespace PruebaTecnica.Controllers
         private bool EquipoExists(int id)
         {
             return _context.Equipos.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> ObtenerJugadores(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Equipo equipo = await _context.Equipos.FindAsync(id);
+            if (equipo == null)
+            {
+                return NotFound();
+            }
+
+            List<Jugador> jugadoresList = new List<Jugador>();
+            await _context.Jugadores.Include(e => e.Estado).Where(j => j.EquipoId == id).ForEachAsync(jugador => jugadoresList.Add(jugador));
+
+            return View("JPorEstados", jugadoresList);
         }
     }
 }

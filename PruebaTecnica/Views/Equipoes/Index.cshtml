@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PruebaTecnica.Models.Equipo>
 
 @{
-    ViewData["Title"] = "Index";
+     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
@@ -9,6 +9,19 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Filtro de Estados
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        @{ foreach (string item in ViewBag.opciones)
+            {
+                <a asp-action="Index" asp-route-estado="@item" class="dropdown-item">@item</a>
+            };
+        }
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -28,26 +41,28 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pais)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaCreacion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pais)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaCreacion)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-action="ObtenerJugadores" asp-route-id="@item.Id">Ver Jugadores</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

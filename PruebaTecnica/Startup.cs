@@ -29,7 +29,7 @@ namespace PruebaTecnica
         {
             services.AddDbContext<EquiposContext>(options =>
                options.UseSqlite(Configuration.GetConnectionString("ConexionSQLite")));
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +56,7 @@ namespace PruebaTecnica
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Equipoes}/{action=Index}/{id?}");
             });
         }
     }
